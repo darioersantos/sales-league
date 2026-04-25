@@ -726,15 +726,20 @@ function secDiv(icon, title) {
 
 async function carregarRanking() {
   try {
-    const proxy = 'https://corsproxy.io/?';
-    const url = encodeURIComponent(SHEETS_URL + '?action=getRanking');
-    const res = await fetch(proxy + url);
+    const res = await fetch(SHEETS_URL + '?action=getRanking');
     const dados = await res.json();
     renderRanking(Array.isArray(dados) ? dados : []);
   } catch(e) {
-    renderRanking([]);
+    try {
+      const proxy = 'https://corsproxy.io/?';
+      const url = encodeURIComponent(SHEETS_URL + '?action=getRanking');
+      const res2 = await fetch(proxy + url);
+      const dados2 = await res2.json();
+      renderRanking(Array.isArray(dados2) ? dados2 : []);
+    } catch(e2) {
+      renderRanking([]);
+    }
   }
-  // Check for medal winners using full history
   if (dashAllDados.length) verificarMedalhasRanking();
 }
 
